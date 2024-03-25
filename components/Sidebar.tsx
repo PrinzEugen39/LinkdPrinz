@@ -1,19 +1,28 @@
 "use client";
-import Logo from "@/assets/image-removebg.png";
 import { navLinks } from "@/utils/links";
-import Image from "next/image";
 
+import { Briefcase } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
-import Link from "next/link";
+import { useTheme } from "next-themes";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  console.log(pathname);
+  const { theme } = useTheme();  
 
   return (
     <aside className="py-4 px-8 h-full bg-muted">
-      <Image src={Logo} alt="logo" className="w-64 mx-auto" />
+      <Link href={"/"}>
+        <div
+          className={`flex justify-center items-center gap-x-2 ${
+            theme === "dark" ? "text-white" : "text-blue-500"
+          }`}
+        >
+          <Briefcase className="size-14" />
+          <span className="text-3xl font-semibold">LinkdPrinz</span>
+        </div>
+      </Link>
       <div className="flex flex-col gap-y-4 mt-20">
         {navLinks.map((navLink) => {
           return (
