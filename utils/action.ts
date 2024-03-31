@@ -35,4 +35,70 @@ export async function createJobAction(
   }
 }
 
+type TGetAllJobsActionType = {
+  search?: string;
+  jobStatus?: string;
+  page?: number;
+  limit?: number;
+};
 
+export async function getAllJobsAction({
+  search,
+  jobStatus,
+  page = 1,
+  limit = 10,
+}: TGetAllJobsActionType): Promise<{
+  jobs: JobType[];
+  count: number;
+  totalPages: number;
+  page: number;
+}> {
+  const clerkId = authAndRedirect();
+
+  try {
+    let whereQuery: Prisma.JobWhereInput = {
+      clerkId,
+    };
+
+    console.log("awal where:", whereQuery);
+
+    if (search) {
+      whereQuery = {
+        ...whereQuery,
+        OR: [
+          {
+            position: {
+              contains: search,
+            },
+          },
+          {
+            company: {
+              contains: search,
+            },
+          },
+        ],
+      };
+    }
+
+    if (jobStatus && jobStatus !== "all") {
+      whereQuery = {
+        ...whereQuery,
+        status: jobStatus,
+      };
+    }
+
+    console.log("akhir where:", whereQuery);
+
+    const jobs: JobType[] = await prisma.job.findMany({
+      where: whereQuery,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return { jobs, count: 0, page: 1, totalPages: 0 };
+  } catch (error) {
+    console.log(error);
+    return { jobs: [], count: 0, page: 1, totalPages: 0 };
+  }
+}
