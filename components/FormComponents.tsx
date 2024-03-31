@@ -32,7 +32,7 @@ export function CustomFormField({ name, control }: TCustomFormField) {
             <FormItem>
               <FormLabel className="capitalize">{name}</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
