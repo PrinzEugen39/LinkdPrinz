@@ -1,7 +1,16 @@
-import React from 'react'
+import { ReactNode } from "react";
 
-export default function JobInfo() {
+export default function JobInfo({
+  icon,
+  text,
+}: {
+  icon: ReactNode;
+  text: string;
+}) {
   return (
-    <div>JobInfo</div>
-  )
+    <div className="flex gap-x-2 items-center">
+      {icon}
+      {text}
+    </div>
+  );
 }

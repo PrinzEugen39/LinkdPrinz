@@ -1,7 +1,10 @@
-import React from 'react'
+import { getChartsDataAction, getStatsAction } from "@/utils/statActions";
+import React from "react";
 
-export default function StatsPage() {
-  return (
-    <div>StatsPage</div>
-  )
+export default async function StatsPage() {
+  const stats = await getChartsDataAction();
+  console.log(stats);
+  
+  
+  return <div>StatsPage</div>;
 }

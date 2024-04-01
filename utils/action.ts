@@ -60,7 +60,7 @@ export async function getAllJobsAction({
       clerkId,
     };
 
-    console.log("awal where:", whereQuery);
+    // console.log("awal where:", whereQuery);
 
     if (search) {
       whereQuery = {
@@ -68,7 +68,7 @@ export async function getAllJobsAction({
         OR: [
           {
             position: {
-              contains: search,
+              contains: search.toLowerCase(),
             },
           },
           {
@@ -87,7 +87,7 @@ export async function getAllJobsAction({
       };
     }
 
-    console.log("akhir where:", whereQuery);
+    // console.log("akhir where:", whereQuery);
 
     const jobs: JobType[] = await prisma.job.findMany({
       where: whereQuery,
@@ -100,5 +100,67 @@ export async function getAllJobsAction({
   } catch (error) {
     console.log(error);
     return { jobs: [], count: 0, page: 1, totalPages: 0 };
+  }
+}
+
+export async function deleteJobAction(id: string): Promise<JobType | null> {
+  const clerkId = authAndRedirect();
+
+  try {
+    const job = await prisma.job.delete({
+      where: {
+        id,
+        clerkId,
+      },
+    });
+
+    return job;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getSingleJobAction(id: string): Promise<JobType | null> {
+  let job: JobType | null = null;
+  const clerkId = authAndRedirect();
+
+  try {
+    job = await prisma.job.findUnique({
+      where: {
+        id,
+        clerkId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    job = null;
+  }
+
+  if (!job) redirect("/jobs");
+
+  // console.log("job:", job);
+  return job;
+}
+
+export async function updateJobAction(
+  id: string,
+  values: CreateAndEditJobType
+): Promise<JobType | null> {
+  const clerkId = authAndRedirect();
+
+  try {
+    const job: JobType = await prisma.job.update({
+      where: {
+        id,
+        clerkId,
+      },
+      data: { ...values },
+    });
+
+    return job;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }

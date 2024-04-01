@@ -20,7 +20,7 @@ export default function Sidebar() {
           }`}
         >
           <Briefcase className="size-14" />
-          <span className="text-3xl font-semibold">LinkdPrinz</span>
+          <span className="text-3xl font-semibold">PrinzTrack</span>
         </div>
       </Link>
       <div className="flex flex-col gap-y-4 mt-20">
